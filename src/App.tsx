@@ -88,10 +88,10 @@ export default function App() {
             {/* Logo */} 
             <a href="#/home" className="flex items-center gap-2 group">
               <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-rose-900 text-rose-100 flex items-center justify-center font-serif text-lg sm:text-2xl font-bold shadow-md shrink-0">
-                M
+                R
               </div>
               <div className="min-w-0">
-                <span className="font-serif text-base sm:text-xl font-bold text-slate-900 tracking-tight block truncate">Roupas Mias</span>
+                <span className="font-serif text-base sm:text-xl font-bold text-slate-900 tracking-tight block truncate">Roupa Mais</span>
                 <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-rose-800 font-semibold block -mt-1 truncate">Moda Gospel</span>
               </div>
             </a>
@@ -202,7 +202,7 @@ export default function App() {
                   <div className="relative mx-auto max-w-xs sm:max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                     <img 
                       src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80" 
-                      alt="Moda evangélica elegante Mias"
+                      alt="Moda evangélica elegante Roupa Mais"
                       className="w-full h-[320px] sm:h-[420px] lg:h-[480px] object-cover hover:scale-105 transition-transform duration-700"
                       onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=80' }}
                     />
@@ -219,7 +219,7 @@ export default function App() {
             <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4">
                 <div>
-                  <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Tendências Mias</span>
+                  <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Tendências Roupa Mais</span>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900">Peças Mais Desejadas</h2>
                 </div>
                 <a href="#/colecao" className="text-sm font-bold text-rose-900 hover:text-rose-700 flex items-center gap-1 min-h-[40px] py-1">
@@ -296,7 +296,7 @@ export default function App() {
         {route === 'colecao' && (
           <div className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-              <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Catálogo Mias</span>
+              <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Catálogo Roupa Mais</span>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-3 sm:mb-4 font-serif">Nossa Coleção Completa</h1>
               <p className="text-xs sm:text-base text-slate-600">Escolha entre vestidos, conjuntos e saias criados para te acompanhar em todos os momentos com elegância.</p>
             </div>
@@ -395,7 +395,7 @@ export default function App() {
             <div className="bg-white rounded-3xl p-5 sm:p-12 border border-slate-200 shadow-xl">
               <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
                 <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Nossa Essência</span>
-                <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 font-serif mb-3 sm:mb-4">Sobre a Roupas Mias</h1>
+                <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 font-serif mb-3 sm:mb-4">Sobre a Roupa Mais</h1>
                 <p className="text-xs sm:text-base text-slate-600 leading-relaxed">Vestindo a mulher cristã com dignidade, elegância e o recato que glorifica a sua fé em todos os momentos.</p>
               </div>
 
@@ -403,7 +403,7 @@ export default function App() {
                 <div>
                   <h3 className="font-serif text-lg sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4">Propósito e Dedicação</h3>
                   <p className="text-xs sm:text-base text-slate-600 leading-relaxed mb-3">
-                    A Roupas Mias nasceu do sonho de oferecer à mulher evangélica peças que unam as últimas tendências da moda com os princípios do pudor e da modéstia.
+                    A Roupa Mais nasceu do sonho de oferecer à mulher evangélica peças que unam as últimas tendências da moda com os princípios do pudor e da modéstia.
                   </p>
                   <p className="text-xs sm:text-base text-slate-600 leading-relaxed">
                     Acreditamos que a verdadeira elegância vem de dentro, mas se reflete no cuidado com que escolhemos nossas vestimentas.
@@ -412,7 +412,7 @@ export default function App() {
                 <div className="rounded-2xl overflow-hidden shadow-lg">
                   <img 
                     src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" 
-                    alt="Moda e propósito Mias"
+                    alt="Moda e propósito Roupa Mais"
                     className="w-full h-56 sm:h-80 object-cover"
                     onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80' }}
                   />
@@ -460,7 +460,7 @@ export default function App() {
                     <span className="material-symbols-outlined text-rose-900 text-2xl shrink-0">mail</span>
                     <div className="min-w-0">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">E-mail de Suporte</h4>
-                      <p className="text-xs sm:text-sm text-slate-600 truncate">contato@roupasmias.com.br</p>
+                      <p className="text-xs sm:text-sm text-slate-600 truncate">contato@roupamais.com.br</p>
                     </div>
                   </div>
 
@@ -660,9 +660,9 @@ export default function App() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-full bg-rose-900 text-white flex items-center justify-center font-serif font-bold">
-                M
+                R
               </div>
-              <span className="font-serif text-lg font-bold text-white">Roupas Mias</span>
+              <span className="font-serif text-lg font-bold text-white">Roupa Mais</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
               Moda evangélica com elegância e sofisticação para mulheres virtuosas.
@@ -700,7 +700,7 @@ export default function App() {
         </div>
 
         <div className="max-w-7xl mx-auto pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-          <p>&copy; 2026 Roupas Mias. Todos os direitos reservados. Feito com elegância para mulheres de fé.</p>
+          <p>&copy; 2026 Roupa Mais. Todos os direitos reservados. Feito com elegância para mulheres de fé.</p>
         </div>
       </footer>
     </div>
