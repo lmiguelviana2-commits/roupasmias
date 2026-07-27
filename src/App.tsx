@@ -6,6 +6,7 @@ export default function App() {
   const [route, setRoute] = useState(() => window.location.hash.replace(/^#\/?/, '') || 'home');
   const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
   const [isCarrinhoOpen, setIsCarrinhoOpen] = useState(false);
+  const [isMenuMobileOpen, setIsMenuMobileOpen] = useState(false);
   const [categoriaAtiva, setCategoriaAtiva] = useState<string>('todos');
   const [termoBusca, setTermoBusca] = useState('');
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
@@ -17,6 +18,7 @@ export default function App() {
     const handleHashChange = () => {
       const newRoute = window.location.hash.replace(/^#\/?/, '') || 'home';
       setRoute(newRoute);
+      setIsMenuMobileOpen(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -55,36 +57,45 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-      {/* Toast Feedback */}
+      {/* Toast Feedback */} 
       {feedbackMsg && (
-        <div className="fixed bottom-6 right-6 z-50 bg-rose-900 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce">
+        <div className="fixed bottom-6 right-4 left-4 sm:left-auto sm:right-6 z-50 bg-rose-900 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center justify-center sm:justify-start gap-3 animate-bounce">
           <span className="material-symbols-outlined text-rose-200">check_circle</span>
-          <span className="text-sm font-medium">{feedbackMsg}</span>
+          <span className="text-sm font-medium text-center sm:text-left">{feedbackMsg}</span>
         </div>
       )}
 
-      {/* Top Bar Promocional */}
-      <div className="bg-rose-900 text-rose-50 text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-        <span className="material-symbols-outlined text-sm">local_shipping</span>
-        <span>Frete Grátis para todo o Brasil nas compras acima de R$ 299 • Parcele em até 6x sem juros</span>
+      {/* Top Bar Promocional - Mudada para preta conforme pedido */} 
+      <div className="bg-slate-900 text-slate-100 text-xs sm:text-sm py-2 px-3 sm:px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
+        <span className="material-symbols-outlined text-sm shrink-0 text-rose-400">local_shipping</span>
+        <span className="truncate">Frete Grátis para todo o Brasil acima de R$ 299 • Até 6x sem juros</span>
       </div>
 
-      {/* Header Principal */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-rose-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      {/* Header Principal */} 
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
           
-          {/* Logo */}
-          <a href="#/home" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-full bg-rose-900 text-rose-100 flex items-center justify-center font-serif text-2xl font-bold shadow-md group-hover:scale-105 transition-transform">
+          {/* Botão Menu Mobile */} 
+          <button 
+            onClick={() => setIsMenuMobileOpen(!isMenuMobileOpen)}
+            className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-rose-50 transition-colors"
+            aria-label="Menu"
+          >
+            <span className="material-symbols-outlined">{isMenuMobileOpen ? 'close' : 'menu'}</span>
+          </button>
+
+          {/* Logo */} 
+          <a href="#/home" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-rose-900 text-rose-100 flex items-center justify-center font-serif text-xl sm:text-2xl font-bold shadow-md">
               M
             </div>
             <div>
-              <span className="font-serif text-xl sm:text-2xl font-bold text-slate-900 tracking-tight block">Roupas Mias</span>
-              <span className="text-[10px] uppercase tracking-widest text-rose-800 font-semibold">Moda Gospel Elegante</span>
+              <span className="font-serif text-lg sm:text-2xl font-bold text-slate-900 tracking-tight block">Roupas Mias</span>
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-rose-800 font-semibold block -mt-1">Moda Gospel</span>
             </div>
           </a>
 
-          {/* Navegação Desktop */}
+          {/* Navegação Desktop */} 
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-700">
             <a href="#/home" className={`transition-colors hover:text-rose-900 ${route === 'home' ? 'text-rose-900 border-b-2 border-rose-900 pb-1' : ''}`}>Início</a>
             <a href="#/colecao" className={`transition-colors hover:text-rose-900 ${route === 'colecao' ? 'text-rose-900 border-b-2 border-rose-900 pb-1' : ''}`}>Coleção</a>
@@ -92,14 +103,14 @@ export default function App() {
             <a href="#/contato" className={`transition-colors hover:text-rose-900 ${route === 'contato' ? 'text-rose-900 border-b-2 border-rose-900 pb-1' : ''}`}>Contato</a>
           </nav>
 
-          {/* Ações (Busca & Sacola) */}
-          <div className="flex items-center gap-3">
+          {/* Ações (Sacola) */} 
+          <div className="flex items-center gap-2">
             <button 
               onClick={() => setIsCarrinhoOpen(true)}
-              className="relative p-2.5 rounded-full bg-rose-50 text-rose-900 hover:bg-rose-100 transition-colors flex items-center gap-2 px-4 border border-rose-200/50"
-              aria-label="Abrir sacola de compras"
+              className="relative p-2 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-full bg-rose-50 text-rose-900 hover:bg-rose-100 transition-colors flex items-center gap-2 border border-rose-200/50 min-h-[40px] min-w-[40px] justify-center"
+              aria-label="Sacola"
             >
-              <span className="material-symbols-outlined">shopping_bag</span>
+              <span className="material-symbols-outlined text-xl sm:text-base">shopping_bag</span>
               <span className="text-xs font-bold hidden sm:inline">Sacola</span>
               {qtdTotalItens > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">
@@ -112,43 +123,73 @@ export default function App() {
         </div>
       </header>
 
-      {/* Menu Mobile */}
-      <div className="md:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-around text-xs font-semibold text-slate-700">
-        <a href="#/home" className={route === 'home' ? 'text-rose-900' : ''}>Início</a>
-        <a href="#/colecao" className={route === 'colecao' ? 'text-rose-900' : ''}>Coleção</a>
-        <a href="#/sobre" className={route === 'sobre' ? 'text-rose-900' : ''}>Essência</a>
-        <a href="#/contato" className={route === 'contato' ? 'text-rose-900' : ''}>Contato</a>
-      </div>
+      {/* Menu Mobile Gaveta / Expansão */} 
+      {isMenuMobileOpen && (
+        <div className="md:hidden fixed inset-x-0 top-16 bg-white border-b border-slate-200 shadow-xl z-30 p-6 flex flex-col gap-4 animate-in slide-in-from-top duration-200">
+          <a 
+            href="#/home" 
+            onClick={() => setIsMenuMobileOpen(false)}
+            className={`px-4 py-3 rounded-xl font-medium text-sm flex items-center gap-3 ${route === 'home' ? 'bg-rose-900 text-white' : 'bg-slate-50 text-slate-800'}`}
+          >
+            <span className="material-symbols-outlined">home</span>
+            <span>Início</span>
+          </a>
+          <a 
+            href="#/colecao" 
+            onClick={() => setIsMenuMobileOpen(false)}
+            className={`px-4 py-3 rounded-xl font-medium text-sm flex items-center gap-3 ${route === 'colecao' ? 'bg-rose-900 text-white' : 'bg-slate-50 text-slate-800'}`}
+          >
+            <span className="material-symbols-outlined">checkroom</span>
+            <span>Coleção Completa</span>
+          </a>
+          <a 
+            href="#/sobre" 
+            onClick={() => setIsMenuMobileOpen(false)}
+            className={`px-4 py-3 rounded-xl font-medium text-sm flex items-center gap-3 ${route === 'sobre' ? 'bg-rose-900 text-white' : 'bg-slate-50 text-slate-800'}`}
+          >
+            <span className="material-symbols-outlined">favorite</span>
+            <span>Nossa Essência</span>
+          </a>
+          <a 
+            href="#/contato" 
+            onClick={() => setIsMenuMobileOpen(false)}
+            className={`px-4 py-3 rounded-xl font-medium text-sm flex items-center gap-3 ${route === 'contato' ? 'bg-rose-900 text-white' : 'bg-slate-50 text-slate-800'}`}
+          >
+            <span className="material-symbols-outlined">support_agent</span>
+            <span>Contato</span>
+          </a>
+        </div>
+      )}
 
-      {/* CONTEÚDO DAS PÁGINAS */}
+      {/* CONTEÚDO DAS PÁGINAS */} 
       <main className="flex-grow">
         {route === 'home' && (
           <div>
-            {/* Hero Section com Estilo Elegante */}
-            <section className="relative overflow-hidden bg-gradient-to-b from-rose-900/10 via-rose-50/50 to-white py-20 px-4 md:px-8">
-              <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Hero Section */} 
+            <section className="relative overflow-hidden bg-gradient-to-b from-rose-900/10 via-rose-50/50 to-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 <div className="lg:col-span-7 text-center lg:text-left">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 border border-rose-200 text-rose-900 text-xs font-semibold uppercase tracking-wider mb-6">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100 border border-rose-200 text-rose-900 text-xs font-semibold uppercase tracking-wider mb-6">
                     <span className="h-2 w-2 rounded-full bg-rose-600 animate-ping" />
                     <span>Nova Coleção Outono-Inverno</span>
                   </div>
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                  <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
                     Moda Evangélica com <span className="bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-pink-700 to-rose-700 font-serif italic">Elegância e Recato</span>
                   </h1>
-                  <p className="text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+                  <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
                     Vestidos midi, alfaiataria fina e conjuntos criados para mulheres que valorizam a beleza clássica, o bom gosto e o pudor.
                   </p>
-                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
                     <a 
                       href="#/colecao"
-                      className="px-8 py-4 rounded-xl bg-rose-900 text-white font-bold text-sm hover:bg-rose-800 transition-all shadow-lg shadow-rose-900/20 flex items-center gap-2"
+                      className="w-full sm:w-auto px-8 py-4 rounded-xl bg-rose-900 text-white font-bold text-sm hover:bg-rose-800 transition-all shadow-lg shadow-rose-900/20 flex items-center justify-center gap-2 min-h-[48px]"
                     >
                       <span>Ver Coleção Completa</span>
                       <span className="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
                     <a 
                       href="#/sobre"
-                      className="px-8 py-4 rounded-xl bg-white text-slate-800 font-semibold text-sm border border-slate-300 hover:bg-slate-50 transition-all"
+                      className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-slate-800 font-semibold text-sm border border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center min-h-[48px]"
                     >
                       Nossa História
                     </a>
@@ -156,36 +197,36 @@ export default function App() {
                 </div>
 
                 <div className="lg:col-span-5 relative">
-                  <div className="relative mx-auto max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                  <div className="relative mx-auto max-w-sm sm:max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                     <img 
                       src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80" 
                       alt="Moda evangélica elegante Mias"
-                      className="w-full h-[480px] object-cover hover:scale-105 transition-transform duration-700"
+                      className="w-full h-[380px] sm:h-[480px] object-cover hover:scale-105 transition-transform duration-700"
                       onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=80' }}
                     />
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent p-6 text-white">
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent p-5 sm:p-6 text-white">
                       <span className="text-xs uppercase tracking-widest text-rose-300 font-bold block mb-1">Destaque da Semana</span>
-                      <p className="font-serif text-xl font-medium">Vestido Midi Plissado Royal</p>
+                      <p className="font-serif text-lg sm:text-xl font-medium">Vestido Midi Plissado Royal</p>
                     </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Seção Destaques da Vitrine */}
-            <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            {/* Seção Destaques da Vitrine */} 
+            <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4">
                 <div>
                   <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Tendências Mias</span>
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">Peças Mais Desejadas</h2>
+                  <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Peças Mais Desejadas</h2>
                 </div>
-                <a href="#/colecao" className="mt-4 md:mt-0 text-sm font-bold text-rose-900 hover:text-rose-700 flex items-center gap-1">
+                <a href="#/colecao" className="text-sm font-bold text-rose-900 hover:text-rose-700 flex items-center gap-1">
                   <span>Ver todas as peças</span>
                   <span className="material-symbols-outlined text-sm">chevron_right</span>
                 </a>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {produtosMias.filter(p => p.destaque).map(produto => (
                   <div key={produto.id} className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
                     <div className="relative overflow-hidden aspect-[4/5] bg-slate-100">
@@ -202,13 +243,13 @@ export default function App() {
                       )}
                       <button 
                         onClick={() => setProdutoSelecionado(produto)}
-                        className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md text-slate-900 font-bold text-xs py-3 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2"
+                        className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs py-3 rounded-xl shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         <span className="material-symbols-outlined text-sm">visibility</span>
                         <span>Ver Detalhes</span>
                       </button>
                     </div>
-                    <div className="p-6 flex flex-col flex-grow">
+                    <div className="p-5 sm:p-6 flex flex-col flex-grow">
                       <span className="text-xs text-rose-800 font-semibold uppercase tracking-wider mb-1">{produto.categoria}</span>
                       <h3 className="font-serif text-lg font-bold text-slate-900 mb-2 group-hover:text-rose-900 transition-colors">{produto.nome}</h3>
                       <div className="mt-auto flex items-baseline gap-3 pt-4 border-t border-slate-100">
@@ -227,23 +268,23 @@ export default function App() {
               </div>
             </section>
 
-            {/* Banner Diferenciais */}
-            <section className="bg-rose-900 text-white py-16 px-4 md:px-8">
-              <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            {/* Banner Diferenciais */} 
+            <section className="bg-rose-900 text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-4">verified</span>
+                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-3">verified</span>
                   <h4 className="font-serif text-xl font-bold mb-2">Modéstia com Sofisticação</h4>
-                  <p className="text-sm text-rose-100 leading-relaxed">Modelagens testadas para garantir caimento impecável, decotes adequados e forros de alta qualidade.</p>
+                  <p className="text-sm text-rose-100 leading-relaxed">Modelagens testadas para garantir caimento impecável e decotes adequados.</p>
                 </div>
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-4">local_shipping</span>
+                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-3">local_shipping</span>
                   <h4 className="font-serif text-xl font-bold mb-2">Envio Rápido e Seguro</h4>
-                  <p className="text-sm text-rose-100 leading-relaxed">Enviamos para todo o Brasil com código de rastreio e embalagem perfumada exclusiva.</p>
+                  <p className="text-sm text-rose-100 leading-relaxed">Enviamos para todo o Brasil com embalagem perfumada exclusiva.</p>
                 </div>
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-4">credit_card</span>
+                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-3">credit_card</span>
                   <h4 className="font-serif text-xl font-bold mb-2">Facilidade no Pagamento</h4>
-                  <p className="text-sm text-rose-100 leading-relaxed">Parcelamento em até 6x sem juros no cartão ou 5% de desconto à vista no Pix.</p>
+                  <p className="text-sm text-rose-100 leading-relaxed">Parcelamento em até 6x sem juros no cartão ou 5% de desconto no Pix.</p>
                 </div>
               </div>
             </section>
@@ -251,21 +292,21 @@ export default function App() {
         )}
 
         {route === 'colecao' && (
-          <div className="py-12 px-4 md:px-8 max-w-7xl mx-auto">
-            <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="py-10 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
               <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Catálogo Mias</span>
-              <h1 className="text-4xl font-extrabold text-slate-900 mb-4 font-serif">Nossa Coleção Completa</h1>
-              <p className="text-slate-600">Escolha entre vestidos, conjuntos e saias criados para te acompanhar em todos os momentos com elegância.</p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 font-serif">Nossa Coleção Completa</h1>
+              <p className="text-sm sm:text-base text-slate-600">Escolha entre vestidos, conjuntos e saias criados para te acompanhar em todos os momentos com elegância.</p>
             </div>
 
-            {/* Filtros e Busca */}
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-8">
-              <div className="flex flex-wrap gap-2 justify-center">
+            {/* Filtros e Busca */} 
+            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between mb-8">
+              <div className="flex flex-wrap gap-2 justify-center w-full lg:w-auto">
                 {['todos', 'vestidos', 'conjuntos', 'saias', 'blusas'].map(cat => (
                   <button
                     key={cat}
                     onClick={() => setCategoriaAtiva(cat)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold capitalize transition-all ${
+                    className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold capitalize transition-all min-h-[40px] ${ 
                       categoriaAtiva === cat 
                         ? 'bg-rose-900 text-white shadow-md'
                         : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
@@ -276,7 +317,7 @@ export default function App() {
                 ))}
               </div>
 
-              <div className="w-full md:w-72 relative">
+              <div className="w-full lg:w-72 relative">
                 <span className="material-symbols-outlined absolute left-3 top-3 text-slate-400">search</span>
                 <input 
                   type="text"
@@ -288,7 +329,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Grid de Produtos */}
+            {/* Grid de Produtos */} 
             {produtosFiltrados.length === 0 ? (
               <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
                 <span className="material-symbols-outlined text-5xl text-slate-300 mb-3">search_off</span>
@@ -301,7 +342,7 @@ export default function App() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {produtosFiltrados.map(produto => (
                   <div key={produto.id} className="group bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
                     <div className="relative overflow-hidden aspect-[4/5] bg-slate-100">
@@ -318,13 +359,13 @@ export default function App() {
                       )}
                       <button 
                         onClick={() => setProdutoSelecionado(produto)}
-                        className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md text-slate-900 font-bold text-xs py-3 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2"
+                        className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs py-3 rounded-xl shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 min-h-[44px]"
                       >
                         <span className="material-symbols-outlined text-sm">visibility</span>
                         <span>Ver Detalhes & Comprar</span>
                       </button>
                     </div>
-                    <div className="p-6 flex flex-col flex-grow">
+                    <div className="p-5 sm:p-6 flex flex-col flex-grow">
                       <span className="text-xs text-rose-800 font-semibold uppercase tracking-wider mb-1">{produto.categoria}</span>
                       <h3 className="font-serif text-lg font-bold text-slate-900 mb-2 group-hover:text-rose-900 transition-colors">{produto.nome}</h3>
                       <p className="text-xs text-slate-500 line-clamp-2 mb-4">{produto.descricao}</p>
@@ -334,9 +375,9 @@ export default function App() {
                         </span>
                         <button 
                           onClick={() => setProdutoSelecionado(produto)}
-                          className="px-4 py-2 bg-rose-900 text-white text-xs font-bold rounded-lg hover:bg-rose-800 transition-colors"
+                          className="px-4 py-2.5 bg-rose-900 text-white text-xs font-bold rounded-xl hover:bg-rose-800 transition-colors min-h-[40px] flex items-center"
                         >
-                          Selecionar Tamanho
+                          Tamanhos
                         </button>
                       </div>
                     </div>
@@ -348,36 +389,36 @@ export default function App() {
         )}
 
         {route === 'sobre' && (
-          <div className="py-16 px-4 md:px-8 max-w-5xl mx-auto">
-            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-xl">
-              <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200 shadow-xl">
+              <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
                 <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Nossa Essência</span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-serif mb-4">Sobre a Roupas Mias</h1>
-                <p className="text-slate-600 leading-relaxed">Vestindo a mulher cristã com dignidade, elegância e o recato que glorifica a sua fé em todos os momentos.</p>
+                <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 font-serif mb-4">Sobre a Roupas Mias</h1>
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">Vestindo a mulher cristã com dignidade, elegância e o recato que glorifica a sua fé em todos os momentos.</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-10 sm:mb-12">
                 <div>
-                  <h3 className="font-serif text-2xl font-bold text-slate-900 mb-4">Propósito e Dedicação</h3>
-                  <p className="text-slate-600 leading-relaxed mb-4">
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-slate-900 mb-4">Propósito e Dedicação</h3>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-4">
                     A Roupas Mias nasceu do sonho de oferecer à mulher evangélica peças que unam as últimas tendências da moda com os princípios do pudor e da modéstia.
                   </p>
-                  <p className="text-slate-600 leading-relaxed">
-                    Acreditamos que a verdadeira elegância vem de dentro, mas se reflete no cuidado com que escolhemos nossas vestimentas para ir à Casa do Senhor, ao trabalho ou em momentos especiais em família.
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                    Acreditamos que a verdadeira elegância vem de dentro, mas se reflete no cuidado com que escolhemos nossas vestimentas.
                   </p>
                 </div>
                 <div className="rounded-2xl overflow-hidden shadow-lg">
                   <img 
                     src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" 
                     alt="Moda e propósito Mias"
-                    className="w-full h-80 object-cover"
+                    className="w-full h-64 sm:h-80 object-cover"
                     onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80' }}
                   />
                 </div>
               </div>
 
               <div className="border-t border-slate-100 pt-8 text-center">
-                <blockquote className="font-serif text-xl italic text-rose-900 max-w-xl mx-auto">
+                <blockquote className="font-serif text-lg sm:text-xl italic text-rose-900 max-w-xl mx-auto">
                   "A mulher virtuosa é a coroa do seu marido... Reveste-se de força e de dignidade." — Provérbios 31:25
                 </blockquote>
               </div>
@@ -386,21 +427,21 @@ export default function App() {
         )}
 
         {route === 'contato' && (
-          <div className="py-16 px-4 md:px-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-xl">
-              <div className="text-center max-w-xl mx-auto mb-10">
+          <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div className="bg-white rounded-3xl p-6 sm:p-12 border border-slate-200 shadow-xl">
+              <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
                 <span className="text-xs uppercase tracking-widest text-rose-800 font-bold block mb-2">Atendimento</span>
-                <h1 className="text-3xl font-extrabold text-slate-900 font-serif mb-4">Fale Conosco</h1>
-                <p className="text-slate-600">Tem dúvidas sobre tamanhos, trocas ou frete? Nossa equipe de atendimento está pronta para te ajudar com todo carinho.</p>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-serif mb-4">Fale Conosco</h1>
+                <p className="text-sm sm:text-base text-slate-600">Tem dúvidas sobre tamanhos, trocas ou frete? Nossa equipe de atendimento está pronta para te ajudar.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-rose-50/50 border border-rose-100">
                     <span className="material-symbols-outlined text-rose-900 text-2xl">chat</span>
                     <div>
-                      <h4 className="font-bold text-slate-900">WhatsApp de Atendimento</h4>
-                      <p className="text-sm text-slate-600 mb-2">(11) 98765-4321</p>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base">WhatsApp de Atendimento</h4>
+                      <p className="text-xs sm:text-sm text-slate-600 mb-2">(11) 98765-4321</p>
                       <a 
                         href="https://wa.me/5511987654321"
                         target="_blank"
@@ -416,16 +457,16 @@ export default function App() {
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-rose-50/50 border border-rose-100">
                     <span className="material-symbols-outlined text-rose-900 text-2xl">mail</span>
                     <div>
-                      <h4 className="font-bold text-slate-900">E-mail de Suporte</h4>
-                      <p className="text-sm text-slate-600">contato@roupasmias.com.br</p>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base">E-mail de Suporte</h4>
+                      <p className="text-xs sm:text-sm text-slate-600">contato@roupasmias.com.br</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4 p-4 rounded-2xl bg-rose-50/50 border border-rose-100">
                     <span className="material-symbols-outlined text-rose-900 text-2xl">schedule</span>
                     <div>
-                      <h4 className="font-bold text-slate-900">Horário de Atendimento</h4>
-                      <p className="text-sm text-slate-600">Segunda a Sexta: 09h às 18h</p>
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base">Horário de Atendimento</h4>
+                      <p className="text-xs sm:text-sm text-slate-600">Segunda a Sexta: 09h às 18h</p>
                     </div>
                   </div>
                 </div>
@@ -449,7 +490,7 @@ export default function App() {
                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Mensagem ou Dúvida</label>
                     <textarea rows={4} required placeholder="Qual peça você tem interesse?" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-900 text-sm"></textarea>
                   </div>
-                  <button type="submit" className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg">
+                  <button type="submit" className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg min-h-[48px]">
                     Enviar Mensagem
                   </button>
                 </form>
@@ -459,12 +500,12 @@ export default function App() {
         )}
       </main>
 
-      {/* Modal de Detalhes do Produto */}
+      {/* Modal de Detalhes do Produto */} 
       {produtoSelecionado && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center p-6 border-b border-slate-100">
-              <h3 className="font-serif text-xl font-bold text-slate-900">Detalhes da Peça</h3>
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl my-auto animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-center p-5 sm:p-6 border-b border-slate-100">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900">Detalhes da Peça</h3>
               <button 
                 onClick={() => { setProdutoSelecionado(null); setTamanhoSelecionado(''); }}
                 className="p-2 rounded-full hover:bg-slate-100 text-slate-500"
@@ -472,18 +513,18 @@ export default function App() {
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 p-6 gap-6">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 p-5 sm:p-6 gap-6">
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 max-h-[300px] md:max-h-none">
                 <img src={produtoSelecionado.imagem} alt={produtoSelecionado.nome} className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col justify-between">
                 <div>
                   <span className="text-xs text-rose-800 font-semibold uppercase tracking-wider">{produtoSelecionado.categoria}</span>
-                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">{produtoSelecionado.nome}</h2>
-                  <p className="text-2xl font-extrabold text-slate-900 mb-4">
+                  <h2 className="font-serif text-xl sm:text-2xl font-bold text-slate-900 mb-2">{produtoSelecionado.nome}</h2>
+                  <p className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-4">
                     {produtoSelecionado.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                   </p>
-                  <p className="text-sm text-slate-600 mb-6 leading-relaxed">{produtoSelecionado.descricao}</p>
+                  <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">{produtoSelecionado.descricao}</p>
 
                   <div className="mb-6">
                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Escolha o Tamanho:</label>
@@ -492,7 +533,7 @@ export default function App() {
                         <button
                           key={t}
                           onClick={() => setTamanhoSelecionado(t)}
-                          className={`w-12 h-12 rounded-xl text-sm font-bold border transition-all ${
+                          className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl text-sm font-bold border transition-all flex items-center justify-center ${ 
                             tamanhoSelecionado === t
                               ? 'bg-rose-900 text-white border-rose-900 shadow-md'
                               : 'bg-white text-slate-700 border-slate-200 hover:border-rose-900'
@@ -511,7 +552,7 @@ export default function App() {
                     setProdutoSelecionado(null);
                     setTamanhoSelecionado('');
                   }}
-                  className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg flex items-center justify-center gap-2 min-h-[48px]"
                 >
                   <span className="material-symbols-outlined">shopping_bag</span>
                   <span>Adicionar à Sacola</span>
@@ -522,14 +563,14 @@ export default function App() {
         </div>
       )}
 
-      {/* Modal / Gaveta do Carrinho */}
+      {/* Modal / Gaveta do Carrinho */} 
       {isCarrinhoOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex justify-end">
           <div className="bg-white w-full max-w-md h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-rose-900">shopping_bag</span>
-                <h3 className="font-serif text-xl font-bold text-slate-900">Sua Sacola ({qtdTotalItens})</h3>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900">Sua Sacola ({qtdTotalItens})</h3>
               </div>
               <button 
                 onClick={() => setIsCarrinhoOpen(false)}
@@ -539,7 +580,7 @@ export default function App() {
               </button>
             </div>
 
-            <div className="flex-grow overflow-y-auto p-6 space-y-4">
+            <div className="flex-grow overflow-y-auto p-4 sm:p-6 space-y-4">
               {carrinho.length === 0 ? (
                 <div className="text-center py-20">
                   <span className="material-symbols-outlined text-5xl text-slate-300 mb-3">remove_shopping_cart</span>
@@ -548,23 +589,23 @@ export default function App() {
                 </div>
               ) : (
                 carrinho.map((item, idx) => (
-                  <div key={idx} className="flex gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 items-center">
-                    <img src={item.produto.imagem} alt={item.produto.nome} className="w-16 h-20 object-cover rounded-xl" />
-                    <div className="flex-grow">
-                      <h4 className="font-serif font-bold text-slate-900 text-sm">{item.produto.nome}</h4>
+                  <div key={idx} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-100 items-center">
+                    <img src={item.produto.imagem} alt={item.produto.nome} className="w-14 h-18 sm:w-16 sm:h-20 object-cover rounded-xl shrink-0" />
+                    <div className="flex-grow min-w-0">
+                      <h4 className="font-serif font-bold text-slate-900 text-xs sm:text-sm truncate">{item.produto.nome}</h4>
                       <p className="text-xs text-slate-500 mt-0.5">Tamanho: <span className="font-semibold text-slate-700">{item.tamanhoEscolhido}</span></p>
                       <div className="flex items-center justify-between mt-2">
-                        <span className="font-bold text-rose-900 text-sm">
+                        <span className="font-bold text-rose-900 text-xs sm:text-sm">
                           {(item.produto.preco * item.quantidade).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </span>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <button 
                             onClick={() => {
                               setCarrinho(prev => prev.map((it, i) => i === idx && it.quantidade > 1 ? { ...it, quantidade: it.quantidade - 1 } : it));
                             }}
                             className="w-7 h-7 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-xs font-bold"
                           >-</button>
-                          <span className="text-xs font-bold">{item.quantidade}</span>
+                          <span className="text-xs font-bold w-4 text-center">{item.quantidade}</span>
                           <button 
                             onClick={() => {
                               setCarrinho(prev => prev.map((it, i) => i === idx ? { ...it, quantidade: it.quantidade + 1 } : it));
@@ -580,7 +621,7 @@ export default function App() {
             </div>
 
             {carrinho.length > 0 && (
-              <div className="p-6 border-t border-slate-100 bg-slate-50 space-y-4">
+              <div className="p-5 sm:p-6 border-t border-slate-100 bg-slate-50 space-y-3 sm:space-y-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Subtotal</span>
                   <span className="font-bold text-slate-900">{valorTotalCarrinho.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
@@ -600,7 +641,7 @@ export default function App() {
                     setCarrinho([]);
                     setIsCarrinhoOpen(false);
                   }}
-                  className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg flex items-center justify-center gap-2 min-h-[48px]"
                 >
                   <span className="material-symbols-outlined">lock</span>
                   <span>Finalizar Compra Segura</span>
@@ -611,9 +652,9 @@ export default function App() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 px-4 md:px-8 mt-auto border-t border-slate-800">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      {/* Footer */} 
+      <footer className="bg-slate-900 text-slate-400 py-10 sm:py-12 px-4 sm:px-6 lg:px-8 mt-auto border-t border-slate-800">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-full bg-rose-900 text-white flex items-center justify-center font-serif font-bold">
@@ -627,7 +668,7 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold text-sm mb-4">Navegação</h4>
+            <h4 className="text-white font-bold text-sm mb-3 sm:mb-4">Navegação</h4>
             <ul className="space-y-2 text-xs">
               <li><a href="#/home" className="hover:text-white transition-colors">Início</a></li>
               <li><a href="#/colecao" className="hover:text-white transition-colors">Coleção Completa</a></li>
@@ -637,7 +678,7 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold text-sm mb-4">Categorias</h4>
+            <h4 className="text-white font-bold text-sm mb-3 sm:mb-4">Categorias</h4>
             <ul className="space-y-2 text-xs">
               <li><a href="#/colecao" className="hover:text-white transition-colors">Vestidos Midi</a></li>
               <li><a href="#/colecao" className="hover:text-white transition-colors">Conjuntos Sociais</a></li>
@@ -647,11 +688,11 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold text-sm mb-4">Newsletter</h4>
+            <h4 className="text-white font-bold text-sm mb-3 sm:mb-4">Newsletter</h4>
             <p className="text-xs text-slate-400 mb-3">Receba novidades e cupons exclusivos em seu e-mail.</p>
             <div className="flex gap-2">
-              <input type="email" placeholder="Seu e-mail" className="bg-slate-800 border border-slate-700 px-3 py-2 rounded-xl text-xs text-white w-full focus:outline-none focus:border-rose-700" />
-              <button onClick={() => alert('Obrigada por se inscrever em nossa newsletter!')} className="px-4 py-2 bg-rose-900 text-white text-xs font-bold rounded-xl hover:bg-rose-800">Assinar</button>
+              <input type="email" placeholder="Seu e-mail" className="bg-slate-800 border border-slate-700 px-3 py-2 rounded-xl text-xs text-white w-full focus:outline-none focus:border-rose-700 min-h-[40px]" />
+              <button onClick={() => alert('Obrigada por se inscrever em nossa newsletter!')} className="px-4 py-2 bg-rose-900 text-white text-xs font-bold rounded-xl hover:bg-rose-800 shrink-0 min-h-[40px]">Assinar</button>
             </div>
           </div>
         </div>
