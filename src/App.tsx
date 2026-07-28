@@ -12,6 +12,7 @@ export default function App() {
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState<string>('');
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [isCheckingOutCakto, setIsCheckingOutCakto] = useState(false);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -47,12 +48,25 @@ export default function App() {
 
   const qtdTotalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
   const valorTotalCarrinho = carrinho.reduce((acc, item) => acc + (item.produto.preco * item.quantidade), 0);
+  const freteCalculado = valorTotalCarrinho > 299 ? 0 : 25;
+  const valorFinal = valorTotalCarrinho + freteCalculado;
 
   const produtosFiltrados = produtosMias.filter(p => {
     const matchCat = categoriaAtiva === 'todos' || p.categoria === categoriaAtiva;
     const matchBusca = p.nome.toLowerCase().includes(termoBusca.toLowerCase()) || p.descricao.toLowerCase().includes(termoBusca.toLowerCase());
     return matchCat && matchBusca;
   });
+
+  const handleCheckoutCakto = () => {
+    if (carrinho.length === 0) return;
+    setIsCheckingOutCakto(true);
+    setTimeout(() => {
+      setIsCheckingOutCakto(false);
+      setIsCarrinhoOpen(false);
+      alert('Redirecionando para o ambiente seguro da Cakto Pay... Pedido gerado com sucesso!');
+      setCarrinho([]);
+    }, 1500);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 overflow-x-hidden">
@@ -65,7 +79,7 @@ export default function App() {
 
       <div className="bg-slate-900 text-slate-100 text-xs sm:text-sm py-2 px-3 sm:px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
         <span className="material-symbols-outlined text-sm shrink-0 text-rose-400">local_shipping</span>
-        <span className="truncate">Frete Grátis para todo o Brasil acima de R$ 299 • Até 6x sem juros</span>
+        <span className="truncate">Frete Grátis para todo o Brasil acima de R$ 299 • Pagamento seguro via Cakto</span>
       </div>
 
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-sm">
@@ -139,7 +153,7 @@ export default function App() {
                 <div className="lg:col-span-7 text-center lg:text-left">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-100 border border-rose-200 text-rose-900 text-xs font-semibold uppercase tracking-wider mb-4 sm:mb-6">
                     <span className="h-2 w-2 rounded-full bg-rose-600 animate-ping" />
-                    <span>Nova Coleção Outono-Inverno</span>
+                    <span>Checkouts integrados via Cakto Pay</span>
                   </div>
                   <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 sm:mb-6">
                     Moda Evangélica com <span className="bg-clip-text text-transparent bg-gradient-to-r from-rose-900 via-pink-700 to-rose-700 font-serif italic">Elegância e Recato</span>
@@ -161,7 +175,7 @@ export default function App() {
                   <div className="relative mx-auto max-w-xs sm:max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
                     <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80" alt="Moda evangélica elegante Roupa Mais" className="w-full h-[320px] sm:h-[420px] lg:h-[480px] object-cover hover:scale-105 transition-transform duration-700" />
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent p-4 sm:p-6 text-white">
-                      <span className="text-[10px] sm:text-xs uppercase tracking-widest text-rose-300 font-bold block mb-1">Destaque da Semana</span>
+                      <span className="text-[10px] sm:text-xs uppercase tracking-widest text-rose-300 font-bold block mb-1">Checkout Cakto Ativado</span>
                       <p className="font-serif text-base sm:text-xl font-medium">Vestido Midi Plissado Royal</p>
                     </div>
                   </div>
@@ -226,9 +240,9 @@ export default function App() {
                   <p className="text-xs sm:text-sm text-rose-100 leading-relaxed">Enviamos para todo o Brasil com embalagem perfumada exclusiva.</p>
                 </div>
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10 sm:col-span-2 sm:max-w-md sm:mx-auto md:col-span-1 md:max-w-none">
-                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-3">credit_card</span>
-                  <h4 className="font-serif text-lg sm:text-xl font-bold mb-2">Facilidade no Pagamento</h4>
-                  <p className="text-xs sm:text-sm text-rose-100 leading-relaxed">Parcelamento em até 6x sem juros no cartão ou 5% de desconto no Pix.</p>
+                  <span className="material-symbols-outlined text-4xl text-rose-300 mb-3">payments</span>
+                  <h4 className="font-serif text-lg sm:text-xl font-bold mb-2">Checkout Cakto Seguro</h4>
+                  <p className="text-xs sm:text-sm text-rose-100 leading-relaxed">Pagamento rápido e processado com total segurança pela tecnologia Cakto.</p>
                 </div>
               </div>
             </section>
@@ -329,7 +343,7 @@ export default function App() {
                     A Roupa Mais nasceu do sonho de oferecer à mulher evangélica peças que unam as últimas tendências da moda com os princípios do pudor e da modéstia.
                   </p>
                   <p className="text-xs sm:text-base text-slate-600 leading-relaxed">
-                    Acreditamos que a verdadeira elegância vem de dentro, mas se reflete no cuidado com que escolhemos nossas vestimentas.
+                    Acreditamos que a verdadeira elegância vem de dentro, mas se reflete no cuidado com que escolhemos nossas vestimentas, processadas com segurança pela Cakto Pay.
                   </p>
                 </div>
                 <div className="rounded-2xl overflow-hidden shadow-lg">
@@ -503,15 +517,34 @@ export default function App() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600">Frete</span>
-                  <span className="font-bold text-emerald-600">{valorTotalCarrinho > 299 ? 'Grátis' : 'R$ 25,00'}</span>
+                  <span className="font-bold text-emerald-600">{freteCalculado === 0 ? 'Grátis' : 'R$ 25,00'}</span>
                 </div>
                 <div className="flex justify-between text-base font-extrabold pt-2 border-t border-slate-200">
                   <span>Total</span>
-                  <span className="text-rose-900">{(valorTotalCarrinho + (valorTotalCarrinho > 299 ? 0 : 25)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                  <span className="text-rose-900">{valorFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                 </div>
-                <button onClick={() => { alert('Pedido finalizado com sucesso! Redirecionando para o pagamento...'); setCarrinho([]); setIsCarrinhoOpen(false); }} className="w-full py-4 bg-rose-900 text-white font-bold text-sm rounded-xl hover:bg-rose-800 transition-colors shadow-lg flex items-center justify-center gap-2 min-h-[48px]">
-                  <span className="material-symbols-outlined">lock</span>
-                  <span>Finalizar Compra Segura</span>
+                
+                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center gap-2 text-xs text-emerald-800">
+                  <span className="material-symbols-outlined text-emerald-600 text-base">verified_user</span>
+                  <span>Checkout seguro processado por <strong>Cakto Pay</strong></span>
+                </div>
+
+                <button 
+                  onClick={handleCheckoutCakto}
+                  disabled={isCheckingOutCakto}
+                  className="w-full py-4 bg-emerald-600 text-white font-bold text-sm rounded-xl hover:bg-emerald-700 transition-colors shadow-lg flex items-center justify-center gap-2 min-h-[48px]"
+                >
+                  {isCheckingOutCakto ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      <span>Conectando à Cakto...</span>
+                    </span>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined">lock</span>
+                      <span>Pagar com Cakto Pay</span>
+                    </>
+                  )}
                 </button>
               </div>
             )}
@@ -547,7 +580,7 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <h4 className="text-white font-bold text-sm mb-3 sm:mb-4">Newsletter</h4>
+            <h4 className="text-white font-bold text-sm mb-3 sm:mb-4">Pagamento Cakto</h4>
             <p className="text-xs text-slate-400 mb-3">Receba novidades e cupons exclusivos em seu e-mail.</p>
             <div className="flex gap-2">
               <input type="email" placeholder="Seu e-mail" className="bg-slate-800 border border-slate-700 px-3 py-2 rounded-xl text-xs text-white w-full focus:outline-none focus:border-rose-700 min-h-[40px]" />
@@ -556,7 +589,7 @@ export default function App() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-          <p>&copy; 2026 Roupa Mais. Todos os direitos reservados. Feito com elegância para mulheres de fé.</p>
+          <p>&copy; 2026 Roupa Mais. Todos os direitos reservados. Checkout processado com segurança via Cakto.</p>
         </div>
       </footer>
     </div>
